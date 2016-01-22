@@ -1,0 +1,219 @@
+-------------------
+GEM FILE
+------------------
+Don't touch Gemfile.lock - belongs to Bundler
+Gemfile  tells bundler the gems that the project needs
+
+bundle install will download install all of the gems in the gemfile
+it will also update the gemfile.lock
+
+------------------------------------
+Bundler
+------------------------------------
+
+Sometimes a command wont work, try:
+bundle exec (the command)
+this basically says, perfomr the command in this context of bundled 
+gems
+
+-----------------------------------
+Star the server
+------------------------------------
+Default is WEBrick
+rails start or rails s will start the server
+
+-------------------------------------
+Generate
+-------------------------------------
+rails generate controller ( controller name) (view name) (view name)..
+rails generate controller demo index
+
+This will add a new controller file, a view file, and an entry to the routes file
+
+--------------------------------------
+File structure
+--------------------------------------
+
+concerns folder
+---------------
+ is a place for common code that may need to be added to the controllers or models
+
+ helpers folder
+ --------------
+ a place for code to help us with our views
+
+ mailers 
+ -------
+ for sending emails
+
+ assets
+ ------
+ location for the css, javascript, and images if you want the rails asset pipeline to process them
+
+ bin
+ ---
+ the commands for the command line
+
+ config
+ ------
+ where we keep the config files for the appliciton, database or even specific environments
+
+ -environments - manage config settings for different envs - 
+
+ -initializers -where we put things that need to be run when the app launches  
+
+ -localesi - nternationalization 
+
+ db
+ ---
+ migrations and code for the database
+
+ lib
+ ----
+ - assets - a place for libraries 
+ - tasks - a place to keep our rake tasts 
+
+ log
+ ---
+ store logs
+
+ public
+ ------
+ anything in this folder will be public facing
+ alternate location for images, css, and javascript
+
+ Rakefile
+ --------
+ used by rake
+
+ README.rdoc
+ -----------
+ A place to describe and document your application
+
+ test
+ ----
+ A place to write code tests
+
+ tmp
+ ---
+ temporary files, used by rails
+
+ vender
+ ------
+ the correct place to put 3rd party code
+
+ ----------------------------------------------
+ Server request handling
+ ----------------------------------------------
+ browser talks to the web server, server first looks in the public folder. If it does not find what it's looking for it talks to rails, which goes to rails routing. Routing parses request to determine which controller and action to use. It will make a request to the Model as needed and then render a view. (MVC)
+
+ The public directory should be set as the root of your project on the web server.
+
+ ----------------------------------------------
+ Routing
+ ----------------------------------------------
+
+ Simple, match route
+ -------------------
+ get "demo/index"
+   is the same as
+ match "demo/index",
+   :to => "demo#index",
+   :via => :get
+
+ Default route structure
+ -----------------------
+ :controller/:action/:id
+
+ match ':controller(/:action(/:id))', :via => :get
+    could also use
+ match ':controller(/:action(/:id(.:format)))', :via => :get 
+ parenthesis are there because they are optional
+ The above used to be considered the default route and included in rails. This is no longer the case.
+
+ Root route
+ ----------
+ If you go to the root of the app and have nothing to compare
+ you can set the root with:
+ root :to => "demo#index" or just root => "demo#index"
+
+ ----------------------------------------------
+ Rendering Templates
+ ----------------------------------------------
+ The route will go into the controller, run whatever code is inside the matching action, and then as a default display the view with the same name.
+ By default if there is no matching, it will go ahead and look for a matching template
+ This can be specified by using the render function
+
+ def index
+   render(:template => 'demo/hello') of just render('demo/hello') or just (render('hello'))
+ end
+
+ Redirect
+ --------
+ A redirect is a whole new request that will go through the controller
+ this is done:
+ redirect_to(:controller => 'demo', :action => 'index')
+ (controller not needed if its the same controller)
+ redirect can also take a simple url like "http://google.com"
+
+ templates
+ ---------
+ ERB - embedded ruby
+ You can use other templating langauges
+ You can also use plain HTML or render them as XML, JSON, or JavaScript
+ <% executes ruby code %>
+ <%= displays outcome of ruby code %>
+
+ ----------------------------------------------
+ Instance Variables
+ ----------------------------------------------
+ A controller is a regular class. Rails makes an instance of this class. Then Rails makes the instance variables available to the template
+
+ The controller sets everything up for the view, you can't go back to the controller from the view.
+
+ ----------------------------------------------
+ Links and URL Parameters
+ ----------------------------------------------
+ You can use standard html links but rails provides a more powerful option
+ <%= link_to('Text for the link', {:controler => 'demo', :action => 'index'})
+ again, if the controller is the same controller you can leave it off
+
+ you can also add parameters
+ <%= link_to('Text for the link', {:controler => 'demo', :action => 'index', :page => 5})
+
+ params
+ ------
+ Rails provides a hash named params that contains the keys and values of the URL parameters
+
+ ----------------------------------------------
+ Databases
+ ----------------------------------------------
+ 1 model = 1 table - represents a single concept
+ tables will plural because there will be many rows
+ each row would be one instance of the object
+ foreign key - a column in a table that reference rows in another table. Always put indexes on foreign keys to increase look up speed.
+
+ There is command line tool you can use to create the database, but it has been found to be buggy in the past. So do it yourself!
+
+ SHOW DATABASES; - list databases
+ CREATE DATABASE simple_cms_development; - create database
+ DROP DATABASE; - deletes the database
+ USE simple_cms_development; - puts us into that database
+
+ creating a new user
+ -------------------
+ GRANT ALL PRIVILEGES ON db_name.*
+ TO 'username'@'localhost'
+ IDENTIFIED BY 'password';
+
+ SHOW GRANTS FOR 'username'@'localhost';
+
+ ----------------------------------------------
+ Rake
+ ----------------------------------------------
+ Runs scripts known as tasks.
+ Written in ruby, similar to make.
+ rake -T will display all available tasks
+
+
+
